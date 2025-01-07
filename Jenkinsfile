@@ -14,7 +14,9 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_REPO .'
+                script {
+                    docker.build('silviacaser/example-voting-app')
+                }
             }
         }
         stage('Push to DockerHub') {
