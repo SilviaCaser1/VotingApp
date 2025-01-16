@@ -43,8 +43,6 @@ jobs:
           docker tag example-voting-app-vote:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
           docker tag example-voting-app-result:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
           docker tag example-voting-app-worker:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
-          docker tag redis:alpine ${{ secrets.DOCKER_USERNAME }}/redis:alpine
-          docker tag postgres:15-alpine ${{ secrets.DOCKER_USERNAME }}/postgres:15-alpine
 
       # Paso 6: Subir las imágenes a DockerHub
       - name: Push Docker images to DockerHub
@@ -52,5 +50,3 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/redis:alpine
-          docker push ${{ secrets.DOCKER_USERNAME }}/postgres:15-alpine
