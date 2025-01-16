@@ -1,33 +1,47 @@
 name: CI/CD Pipeline
 
+# Se ejecuta cuando hay un push en la rama main
 on:
   push:
     branches:
       - main
 
 jobs:
-  build-and-test:
+  build-and-push-docker-images:
     runs-on: ubuntu-latest
 
     steps:
+      # Paso 1: Checkout del código
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker
+      # Paso 2: Configurar Docker Buildx para construcción avanzada
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker images
+      # Paso 3: Iniciar sesión en DockerHub
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Paso 4: Construir y etiquetar imágenes Docker
+      - name: Build and tag Docker images
         run: |
           docker-compose build
+          # Etiquetar imágenes para DockerHub
+          docker tag example-voting-app-vote ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
+          docker tag example-voting-app-result ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
+          docker tag example-voting-app-worker ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
+          docker tag redis:alpine ${{ secrets.DOCKER_USERNAME }}/redis:alpine
+          docker tag postgres:15-alpine ${{ secrets.DOCKER_USERNAME }}/postgres:15-alpine
 
-      - name: Run unit tests
-        run: |
-          docker-compose run vote pytest
-
+      # Paso 5: Subir las imágenes a DockerHub
       - name: Push Docker images to DockerHub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          docker-compose push
+          docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/redis:alpine
+          docker push ${{ secrets.DOCKER_USERNAME }}/postgres:15-alpine
