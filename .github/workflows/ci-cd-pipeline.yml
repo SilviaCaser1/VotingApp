@@ -33,9 +33,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Paso 5: Construir y etiquetar imágenes Docker
+      - name: Build Docker images
+        run: |
+          docker-compose build || exit 1
+          
       - name: Build and tag Docker images
         run: |
-          docker-compose build
           # Etiquetar imágenes para DockerHub
           docker tag example-voting-app-vote ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
           docker tag example-voting-app-result ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
