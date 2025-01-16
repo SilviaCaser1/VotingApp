@@ -7,6 +7,7 @@ services:
     build: 
       context: ./vote
       target: dev
+    image: example-voting-app-vote:latest  
     depends_on:
       redis:
         condition: service_healthy
@@ -26,6 +27,7 @@ services:
 
   result:
     build: ./result
+    image: example-voting-app-result:latest
     # use nodemon rather than node for local dev
     entrypoint: nodemon --inspect=0.0.0.0 server.js
     depends_on:
@@ -43,6 +45,7 @@ services:
   worker:
     build:
       context: ./worker
+    image: example-voting-app-worker:latest  
     depends_on:
       redis:
         condition: service_healthy 
