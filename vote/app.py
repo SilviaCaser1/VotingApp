@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, make_response, g
-from redis import Redis
 import os
 import socket
 import random
@@ -16,9 +15,14 @@ gunicorn_error_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers.extend(gunicorn_error_logger.handlers)
 app.logger.setLevel(logging.INFO)
 
+# Función para obtener una instancia de Redis (puede ser mockeada en los tests)
 def get_redis():
-    if not hasattr(g, 'redis'):
-        g.redis = Redis(host="redis", db=0, socket_timeout=5)
+    if not hasattr(g, "redis"):
+        try:
+            from redis import Redis  # Importar Redis solo si está disponible
+            g.redis = Redis(host="redis", db=0, socket_timeout=5)
+        except ImportError:
+            g.redis = None
     return g.redis
 
 @app.route("/", methods=['POST','GET'])
@@ -29,20 +33,24 @@ def hello():
 
     vote = None
 
-    if request.method == 'POST':
-        redis = get_redis()
-        vote = request.form['vote']
-        app.logger.info('Received vote for %s', vote)
-        data = json.dumps({'voter_id': voter_id, 'vote': vote})
-        redis.rpush('votes', data)
+    if request.method == "POST":
+        vote = request.form["vote"]
+        app.logger.info("Received vote for %s", vote)
 
-    resp = make_response(render_template(
-        'index.html',
-        option_a=option_a,
-        option_b=option_b,
-        hostname=hostname,
-        vote=vote,
-    ))
+        redis = get_redis()
+        if redis:
+            data = json.dumps({"voter_id": voter_id, "vote": vote})
+            redis.rpush("votes", data)
+
+    resp = make_response(
+        render_template(
+            "index.html",
+            option_a=option_a,
+            option_b=option_b,
+            hostname=hostname,
+            vote=vote,
+        )
+    )
     resp.set_cookie('voter_id', voter_id)
     return resp
 
