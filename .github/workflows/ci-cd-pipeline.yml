@@ -8,13 +8,47 @@ on:
 
 jobs:
   build-and-push-docker-images:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       # Paso 1: Checkout del código
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
+      - name: Install Python dependencies for `vote` and `worker`
+        run: |
+          pip install -r vote/requirements.txt
+          pip install -r worker/requirements.txt
+
+      - name: Run Python unit tests for `vote`
+        run: |
+          cd vote
+          python -m unittest discover -s . -p "test_*.py"
+
+      - name: Run Python unit tests for `worker`
+        run: |
+          cd worker
+          python -m unittest discover -s . -p "test_*.py"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Node.js dependencies for `result`
+        run: |
+          cd result
+          npm install
+
+      - name: Run Node.js unit tests for `result`
+        run: |
+          cd result
+          npm test
+          
       # Paso 2: Configurar Docker Buildx para construcción avanzada
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
