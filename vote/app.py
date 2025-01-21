@@ -1,11 +1,11 @@
-import redis
+#import redis
 from flask import Flask, render_template, request, make_response, g
 import os
 import socket
 import random
 import json
 import logging
-from redis import Redis
+#from redis import Redis
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
@@ -18,20 +18,20 @@ app.logger.handlers.extend(gunicorn_error_logger.handlers)
 app.logger.setLevel(logging.INFO)
 
 # Configuración del cliente de Redis
-if os.getenv("FLASK_ENV") == "testing":
-    redis_client = MagicMock()
-else:
-    redis_client = redis.StrictRedis(host="redis", port=6379, decode_responses=True)
+#if os.getenv("FLASK_ENV") == "testing":
+#    redis_client = MagicMock()
+#else:
+#    redis_client = redis.StrictRedis(host="redis", port=6379, decode_responses=True)
 
 # Función para obtener una instancia de Redis (puede ser mockeada en los tests)
-def get_redis():
-    if not hasattr(g, "redis"):
-        try:
-            from redis import Redis  # Importar Redis solo si está disponible
-            g.redis = Redis(host="redis", db=0, socket_timeout=5)
-        except ImportError:
-            g.redis = None
-    return g.redis
+#def get_redis():
+#    if not hasattr(g, "redis"):
+#        try:
+#            from redis import Redis  # Importar Redis solo si está disponible
+#            g.redis = Redis(host="redis", db=0, socket_timeout=5)
+#        except ImportError:
+#            g.redis = None
+#    return g.redis
 
 @app.route("/", methods=['POST','GET'])
 def hello():

@@ -1,3 +1,2 @@
-Flask
-Redis
-gunicorn
+Flask==2.0.1
+unittest
