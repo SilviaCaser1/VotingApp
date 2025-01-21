@@ -1,3 +1,4 @@
+import redis
 from flask import Flask, render_template, request, make_response, g
 import os
 import socket
@@ -55,7 +56,7 @@ def hello():
         # Aquí puedes agregar lógica para manejar el voto
         redis_client.rpush("votes", vote)  # Almacenamos el voto en Redis (mockeado o real)
         return "Vote received", 200
-    return render_template("index.html")
+                                                                                                                            return render_template("index.html")
     
     resp = make_response(
         render_template(
