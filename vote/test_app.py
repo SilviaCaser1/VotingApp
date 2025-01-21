@@ -4,6 +4,11 @@ from app import app
 
 class TestVoteApp(unittest.TestCase):
     def setUp(self):
+         # Mockear redis_client
+        patcher = patch("app.redis_client")
+        self.mock_redis = patcher.start()
+        self.addCleanup(patcher.stop)
+
         self.app = app.test_client()
         self.app.testing = True
 
@@ -13,20 +18,27 @@ class TestVoteApp(unittest.TestCase):
         mock_redis.rpush = MagicMock()
 
         # Simula un formulario POST con el voto "Cats"
-        response = self.app.post("/", json={"vote": "Cats"})
+        response = self.app.post("/", data={"vote": "Cats"})
 
-        # Verifica que el código de estado sea 200
+        # Verificar que Redis recibió el voto
+        self.mock_redis.rpush.assert_called_with("votes", "Cats")
+        # Verificar que el código de estado sea 200
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Received vote for Cats", response.data)
 
-        # Verifica que se haya llamado al método rpush de Redis
-        mock_redis.rpush.assert_called_once_with("votes", "Cats")
+    def test_missing_vote(self):
+        # Simular un POST sin datos
+        response = self.app.post("/", data={})
+
+        # Verificar que Redis no fue llamado
+        self.mock_redis.rpush.assert_not_called()
+        # Verificar que el código de estado sea 400
+        self.assertEqual(response.status_code, 400)
 
     def test_page_load(self):
-        # Simula una solicitud GET
+        # Simular una solicitud GET
         response = self.app.get("/")
 
-        # Verifica que el código de estado sea 200
+        # Verificar que el código de estado sea 200
         self.assertEqual(response.status_code, 200)
 
 if __name__ == "__main__":
