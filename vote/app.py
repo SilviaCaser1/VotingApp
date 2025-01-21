@@ -4,6 +4,7 @@ import socket
 import random
 import json
 import logging
+from redis import Redis
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
@@ -14,6 +15,9 @@ app = Flask(__name__)
 gunicorn_error_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers.extend(gunicorn_error_logger.handlers)
 app.logger.setLevel(logging.INFO)
+
+# Configuración del cliente de Redis
+redis_client = Redis(host='localhost', port=6379, decode_responses=True)
 
 # Función para obtener una instancia de Redis (puede ser mockeada en los tests)
 def get_redis():
