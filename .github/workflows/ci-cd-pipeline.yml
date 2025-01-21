@@ -50,7 +50,10 @@ jobs:
       # Paso 2: Configurar Docker Buildx para construcción avanzada
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
+        with:
+          version: v0.20.0
+          disable: true  # Deshabilitar Buildx para evitar problemas de modo privilegiado
+     
       # Paso 3: Instalar docker-compose
       - name: Install Docker Compose
         run: |
