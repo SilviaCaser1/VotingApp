@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-and-push-docker-images:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest  # Cambiado a Linux para evitar problemas de permisos #windows-latest
 
     steps:
       # Paso 1: Checkout del código
@@ -52,13 +52,13 @@ jobs:
         uses: docker/setup-buildx-action@v2
         with:
           version: v0.20.0
-          disable: true  # Deshabilitar Buildx para evitar problemas de modo privilegiado
+          #disable: true  # Deshabilitar Buildx para evitar problemas de modo privilegiado
      
       # Paso 3: Instalar docker-compose
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+ #     - name: Install Docker Compose
+ #       run: |
+ #         sudo apt-get update
+ #         sudo apt-get install -y docker-compose
           
       # Paso 4: Iniciar sesión en DockerHub
       - name: Log in to DockerHub
@@ -68,20 +68,29 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Paso 5: Construir y etiquetar imágenes Docker
-      - name: Build Docker images
-        run: |
-          docker-compose build || exit 1
+ #     - name: Build Docker images
+ #       run: |
+ #         docker-compose build || exit 1
           
-      - name: Build and tag Docker images
-        run: |
+ #     - name: Build and tag Docker images
+ #       run: |
           # Etiquetar imágenes para DockerHub
-          docker tag example-voting-app-vote:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
-          docker tag example-voting-app-result:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
-          docker tag example-voting-app-worker:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
+ #         docker tag example-voting-app-vote:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
+ #         docker tag example-voting-app-result:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
+ #         docker tag example-voting-app-worker:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
 
       # Paso 6: Subir las imágenes a DockerHub
-      - name: Push Docker images to DockerHub
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
+ #     - name: Push Docker images to DockerHub
+ #       run: |
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
+            ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
+            ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest        
+ #         docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
+ #         docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
+ #         docker push ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
