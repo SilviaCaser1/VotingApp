@@ -56,12 +56,15 @@ jobs:
         with:
           version: v0.20.0
           #disable: true  # Deshabilitar Buildx para evitar problemas de modo privilegiado
-     
+    
+      - name: Set up Docker Compose
+        uses: docker/setup-buildx-action@v2
+      
       # Paso 3: Instalar docker-compose
- #     - name: Install Docker Compose
- #       run: |
- #         sudo apt-get update
- #         sudo apt-get install -y docker-compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
           
       # Paso 4: Iniciar sesión en DockerHub
       - name: Log in to DockerHub
