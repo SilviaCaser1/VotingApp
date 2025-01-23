@@ -40,12 +40,15 @@ jobs:
       - name: Install Node.js dependencies for `result`
         run: |
           cd result
-          npm install
+          npm ci
+#          npm install
 
       - name: Run Node.js unit tests for `result`
         run: |
           cd result
-          npm test
+          chmod +x ./node_modules/.bin/jest
+          npx jest
+#          npm test
           
       # Paso 2: Configurar Docker Buildx para construcción avanzada
       - name: Set up Docker Buildx
