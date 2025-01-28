@@ -55,7 +55,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         with:
-          driver: docker-container  # Mantener el driver predeterminado
+          driver: docker  # Mantener el driver predeterminado
           use: true
 
       # Paso 5: Instalar docker-compose
