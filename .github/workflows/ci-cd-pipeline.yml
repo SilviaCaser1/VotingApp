@@ -84,10 +84,21 @@ jobs:
  #         docker tag example-voting-app-vote:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
  #         docker tag example-voting-app-result:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
  #         docker tag example-voting-app-worker:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-worker:latest
-      - name: Build and push Docker images using Docker Compose
+      - name: Build and push Docker images
         run: |
-         docker-compose build
-         docker-compose push
+          # Verificar que DOCKER_USERNAME esté configurado
+          if [ -z "$DOCKER_USERNAME" ]; then
+            echo "Error: La variable DOCKER_USERNAME no está configurada."
+            exit 1
+          fi
+
+          # Construir y subir imágenes
+          docker-compose build
+          docker-compose push
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          
       # Paso 6: Subir las imágenes a DockerHub
  #     - name: Push Docker images to DockerHub
  #       run: |
