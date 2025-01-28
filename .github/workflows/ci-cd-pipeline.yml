@@ -32,7 +32,7 @@ jobs:
       - name: Run Python unit tests
         run: |
           cd vote
-          python -m unittest discover -s tests -p "test_*.py"
+          python -m unittest discover -s . -p "test_*.py"
 
       # Paso 3: Configurar entorno para Node.js y ejecutar tests
       - name: Set up Node.js
