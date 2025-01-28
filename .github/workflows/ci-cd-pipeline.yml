@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-and-push-docker-images:
-    runs-on: windows-latest  # Cambiado a Linux para evitar problemas de permisos #windows-latest
+    runs-on: ubuntu-latest  # Cambiado a Linux para evitar problemas de permisos #windows-latest
 
     steps:
       # Paso 1: Checkout del código
