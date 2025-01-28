@@ -43,12 +43,21 @@ jobs:
         run: |
           cd result
           npm install
+
+      - name: Add execution permissions
+        run: |
+          chmod +x ./result/node_modules/.bin/jest
  
       - name: Run Node.js unit tests for `result`
         run: |
           cd result
-          chmod +x ./node_modules/.bin/jest   
           npm test
+
+      - name: Export Docker Username
+      # Paso 4: Iniciar sesión en DockerHub
+        run: |
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
 
       # Paso 4: Iniciar sesión en DockerHub
       - name: Log in to DockerHub
@@ -60,9 +69,9 @@ jobs:
       # Paso 5: Construir y etiquetar imágenes Docker
       - name: Build Docker images
         run: |
-          docker compose build
+          docker compose build --build-arg DOCKER_USERNAME=${DOCKER_USERNAME} || exit
 
-      - name: Tag Docker images
+      - name: Build and tag Docker images
         run: |
           docker tag example-voting-app-vote:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
           docker tag example-voting-app-result:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
