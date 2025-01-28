@@ -11,12 +11,15 @@ on:
 
 jobs:
   build-and-push-docker-images:
-    runs-on: ubuntu-latest  # Cambiado a Linux para evitar problemas de permisos #windows-latest
+    runs-on: windows-latest  # Cambiado a Linux para evitar problemas de permisos #windows-latest
 
     steps:
       # Paso 1: Checkout del código
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Check Docker Compose version
+        run: docker-compose --version
 
      # Paso 2: Configurar entorno para Python y ejecutar tests   
       - name: Set up Python
