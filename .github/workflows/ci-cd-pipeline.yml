@@ -66,12 +66,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Paso 5: Construir y etiquetar imágenes Docker
-      - name: Build Docker images
-        run: |
-          docker compose build --build-arg DOCKER_USERNAME=${DOCKER_USERNAME} || exit
+      - name: Check DOCKER_USERNAME
+        run: echo "DOCKER_USERNAME is ${{ secrets.DOCKER_USERNAME }}"
 
-      - name: Build and tag Docker images
+      # Paso 5: Construir y etiquetar imágenes Docker
+      - name: Build Docker images individually
+        run: |
+          docker build -t example-voting-app-vote:latest ./vote
+          docker build -t example-voting-app-result:latest ./result
+          docker build -t example-voting-app-worker:latest ./worker
+
+      - name: Tag Docker images
         run: |
           docker tag example-voting-app-vote:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-vote:latest
           docker tag example-voting-app-result:latest ${{ secrets.DOCKER_USERNAME }}/example-voting-app-result:latest
