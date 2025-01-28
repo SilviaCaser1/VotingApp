@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Check Docker Compose version
-        run: docker-compose --version
+        run: docker compose version
 
      # Paso 2: Configurar entorno para Python y ejecutar tests   
       - name: Set up Python
