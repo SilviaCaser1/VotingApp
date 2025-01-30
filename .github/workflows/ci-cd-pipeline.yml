@@ -113,9 +113,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager
 
-      - name: Ejecutar pruebas Selenium
+      - name: Ejecutar pruebas unitarias para vote
         run: |
-          pytest integration tests --disable-warnings
-        env:
-          SELENIUM_HOST: selenium
-          SELENIUM_PORT: 4444
+          pytest vote/tests --disable-warnings
+      
+      - name: Ejecutar pruebas unitarias para result
+        run: |
+          pytest result/tests --disable-warnings
+      
+      - name: Ejecutar pruebas unitarias para worker
+        run: |
+          pytest worker/tests --disable-warnings
+      
+      - name: Ejecutar pruebas Selenium (Integración)
+        run: |
+          pytest integration_tests --disable-warnings
+
