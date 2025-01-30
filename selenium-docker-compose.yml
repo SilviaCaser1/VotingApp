@@ -1,0 +1,29 @@
+services:
+  # Selenium Hub
+  selenium-hub:
+    image: selenium/hub:4.16.1  # Versión actualizada
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"  # Puerto donde se comunica con Selenium Grid
+    networks:
+      - selenium-network
+
+  # Selenium Node - Chrome
+  chrome:
+    image: selenium/node-chrome:4.16.1 # Versión actualizada
+    container_name: chrome
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PORT=4444
+    ports:
+      - "5900:5900"  # Para conexión remota VNC
+    networks:
+      - selenium-network
+
+networks:
+  selenium-network:
+    driver: bridge
+ 
+    
