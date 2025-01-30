@@ -98,6 +98,7 @@ jobs:
         image: selenium/standalone-chrome:latest
         ports:
           - 4444:4444
+        options: --user-data-dir=/tmp/selenium_user_data  # Usar un directorio temporal único 
 
     steps:
       - name: Checkout código
