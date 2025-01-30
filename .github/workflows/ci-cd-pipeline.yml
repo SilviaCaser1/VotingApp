@@ -115,7 +115,7 @@ jobs:
 
       - name: Ejecutar pruebas Selenium
         run: |
-          pytest integration_tests --disable-warnings
+          pytest integration tests --disable-warnings
         env:
           SELENIUM_HOST: selenium
           SELENIUM_PORT: 4444
