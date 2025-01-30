@@ -113,6 +113,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager
 
+      # Paso para verificar y matar cualquier proceso de Chrome
+      - name: Verificar y matar procesos previos de Chrome
+        run: |
+        
+          ps aux | grep chrome || true  # Muestra los procesos relacionados con Chrome 
+          pkill -f chrome || true       # Mata cualquier proceso de Chrome previo
+
       - name: Ejecutar pruebas unitarias para vote
         run: |
           pytest vote/tests --disable-warnings
