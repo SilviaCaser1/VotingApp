@@ -116,11 +116,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager
 
+
+    # Instalar Google Chrome y ChromeDriver en el runner de GitHub Actions
+      - name: Instalar Google Chrome y ChromeDriver
+        run: |
+           sudo apt-get update
+           sudo apt-get install -y google-chrome-stable
+           CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
+           wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+           unzip chromedriver_linux64.zip
+           sudo mv chromedriver /usr/local/bin/
+           rm chromedriver_linux64.zip
+      
       # Paso para verificar y matar cualquier proceso de Chrome
       - name: Verificar y matar procesos previos de Chrome
         run: |
-        
-          pkill -f chrome || true       # Mata cualquier proceso de Chrome previo
+          pkill -f chrome || true
+          pkill -f chromedriver || true    
 
       - name: Ejecutar pruebas unitarias para vote
         run: |
