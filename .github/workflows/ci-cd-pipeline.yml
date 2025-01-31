@@ -98,7 +98,7 @@ jobs:
         image: selenium/standalone-chrome:latest
         ports:
           - 4444:4444
-        options: --user-data-dir=/tmp/selenium_user_data  # Usar un directorio temporal único 
+#        options: --user-data-dir=/tmp/selenium_user_data  # Usar un directorio temporal único 
 
     steps:
       - name: Checkout código
@@ -118,7 +118,6 @@ jobs:
       - name: Verificar y matar procesos previos de Chrome
         run: |
         
-          ps aux | grep chrome || true  # Muestra los procesos relacionados con Chrome 
           pkill -f chrome || true       # Mata cualquier proceso de Chrome previo
 
       - name: Ejecutar pruebas unitarias para vote
