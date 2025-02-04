@@ -13,7 +13,7 @@ def driver():
     # Configurar el WebDriver para conectarse al contenedor de Selenium
     driver = webdriver.Remote(
         command_executor='http://selenium:4444/wd/hub',  # URL del servicio Selenium en GitHub Actions
-        desired_capabilities=DesiredCapabilities.CHROME
+        options=chrome_options
     )
     yield driver
     driver.quit()
