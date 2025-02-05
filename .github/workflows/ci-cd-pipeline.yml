@@ -56,6 +56,10 @@ jobs:
       - name: Export Docker Username
       # Paso 4: Iniciar sesión en DockerHub
         run: |
+          if [[ -z "${{ secrets.DOCKER_USERNAME }}" ]]; then
+          echo "DOCKER_USERNAME is empty!"
+          exit 1
+          fi
           echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
           echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
 
