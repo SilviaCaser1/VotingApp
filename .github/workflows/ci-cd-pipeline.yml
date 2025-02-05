@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-and-push-docker-images:
-    runs-on: ubuntu-latest  # Cambiado a Linux
+    runs-on: ubuntu-latest  # Cambiado a Linux 
 
     steps:
       # Paso 1: Checkout del código
