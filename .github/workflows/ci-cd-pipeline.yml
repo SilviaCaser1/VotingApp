@@ -62,7 +62,10 @@ jobs:
           fi
           echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
           echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
-
+      
+      - name: Debug Variables
+        run: echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}"
+      
       # Paso 4: Iniciar sesión en DockerHub
       - name: Log in to DockerHub
         uses: docker/login-action@v2
