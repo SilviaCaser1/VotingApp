@@ -120,9 +120,8 @@ jobs:
         run: sleep 10  # Espera 10 segundos antes de ejecutar las pruebas
 
       - name: Levantar contenedores de la aplicación
-      
         run: |
-          docker-compose up -d
+          docker compose up -d
           
 
     # Instalar Google Chrome y ChromeDriver en el runner de GitHub Actions
