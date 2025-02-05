@@ -12,22 +12,23 @@ def driver():
     chrome_options.add_argument("--headless")  # Para ejecutar en modo sin interfaz gráfica
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
 
     # Configurar el WebDriver para conectarse al contenedor de Selenium
     driver = webdriver.Remote(
         command_executor='http://selenium:4444/wd/hub',  # URL del servicio Selenium en GitHub Actions
-        options=chrome_options  # Ahora está correctamente definido
+        options=chrome_options
     )
     yield driver
     driver.quit()
 
 def test_title(driver):
-    driver.get(VOTE_URL)
-    assert "Vote" in driver.title  # Ajustar si el título es diferente
+    driver.get("http://localhost:80")
+    assert "Vote" in driver.title  
 
 def test_element(driver):
-    driver.get(VOTE_URL)
-    element = driver.find_element(By.ID, "vote-button")  # Verifica que este ID exista en el HTML
+    driver.get("http://localhost:80")
+    element = driver.find_element(By.ID, "vote-button") 
     assert element.is_displayed()
 
 
