@@ -68,7 +68,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: votingapp
+      POSTGRES_DB: example-voting-app-db-1
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./healthchecks:/healthchecks
