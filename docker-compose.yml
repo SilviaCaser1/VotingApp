@@ -64,7 +64,8 @@ services:
       - back-tier
 
   db:
-    image: postgres:15-alpine
+    image: postgres:15
+    container_name: votingapp-db-1
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -75,7 +76,9 @@ services:
       - ./db/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: /healthchecks/postgres.sh
-      interval: 5s
+      interval: 10s       # Aumenta el intervalo entre chequeos
+      retries: 10         # Aumenta el número de intentos
+        start_period: 30s   # Aumenta el tiempo antes de comenzar los chequeos
     networks:
       - back-tier
 
