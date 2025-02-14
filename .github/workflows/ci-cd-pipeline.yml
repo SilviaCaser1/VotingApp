@@ -133,10 +133,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager
 
-      - name: Esperar a que Redis esté listo
-        run: |
-          sleep 5  # Espera para evitar problemas de conexión
-          until echo PING | nc -w 2 localhost 6379; do sleep 2; done
+      - name: Ver logs de Redis si falla
+        if: failure()
+        run: docker logs example-voting-app-redis-1 || true
 
       - name: Esperar a que Selenium esté listo
         run: sleep 10  # Espera 10 segundos antes de ejecutar las pruebas
@@ -144,7 +143,12 @@ jobs:
       - name: Levantar contenedores de la aplicación
         run: |
           docker compose up -d
-                
+
+      - name: Esperar a que Redis esté listo
+        run: |
+          sleep 10    # Espera para evitar problemas de conexión
+          until echo PING | nc -w 2 localhost 6379; do sleep 2; done
+          
       - name: Verificar archivos de pruebas
         run: ls -R         
       
