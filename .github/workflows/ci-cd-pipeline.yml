@@ -103,6 +103,16 @@ jobs:
       VOTE_URL: "http://localhost:80"
 
     services:
+      redis:
+        image: redis:7.4.2
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping || exit 1"
+          --health-interval 5s
+          --health-retries 5
+          --health-timeout 2s
+        
       selenium:
         image: selenium/standalone-chrome:latest
         ports:
@@ -123,42 +133,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest webdriver-manager
 
+      - name: Esperar a que Redis esté listo
+        run: |
+          sleep 5  # Espera para evitar problemas de conexión
+          until echo PING | nc -w 2 localhost 6379; do sleep 2; done
+
       - name: Esperar a que Selenium esté listo
         run: sleep 10  # Espera 10 segundos antes de ejecutar las pruebas
 
       - name: Levantar contenedores de la aplicación
         run: |
           docker compose up -d
-          
-
-    # Instalar Google Chrome y ChromeDriver en el runner de GitHub Actions
-   #   - name: Instalar Google Chrome y ChromeDriver
-   #     run: |
-   #        sudo apt-get update
-   #        sudo apt-get install -y google-chrome-stable
-   #        CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
-   #        wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-   #        unzip chromedriver_linux64.zip
-   #        sudo mv chromedriver /usr/local/bin/
-   #        rm chromedriver_linux64.zip
-      
-      # Paso para verificar y matar cualquier proceso de Chrome
-   #   - name: Verificar y matar procesos previos de Chrome
-   #     run: |
-   #       pkill -f chrome || true
-   #       pkill -f chromedriver || true    
-
-   #   - name: Ejecutar pruebas unitarias para vote
-   #     run: |
-   #       pytest vote/tests --disable-warnings
-      
-   #   - name: Ejecutar pruebas unitarias para result
-   #     run: |
-   #       pytest result/tests --disable-warnings
-      
-   #   - name: Ejecutar pruebas unitarias para worker
-   #     run: |
-   #       pytest worker/tests --disable-warnings
                 
       - name: Verificar archivos de pruebas
         run: ls -R         
