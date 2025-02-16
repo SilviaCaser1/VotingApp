@@ -72,13 +72,11 @@ services:
       POSTGRES_DB: votingapp
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./healthchecks:/healthchecks
-      - ./db/init:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "/healthchecks/postgres.sh || exit 1"]
-      interval: 10s       # Aumenta el intervalo entre chequeos
-      retries: 10         # Aumenta el número de intentos
-      start_period: 30s   # Aumenta el tiempo antes de comenzar los chequeos
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s       # intervalo entre chequeos
+      retries: 5         # número de intentos
+      start_period: 30s   # tiempo antes de comenzar los chequeos
     networks:
       - back-tier
 
