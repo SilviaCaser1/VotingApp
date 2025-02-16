@@ -149,6 +149,11 @@ jobs:
           sleep 10    # Espera para evitar problemas de conexión
           until echo PING | nc -w 2 localhost 6379; do sleep 2; done
           
+      - name: Esperar a que Postgres esté listo
+        run: |
+          sleep 10  # Da tiempo a Postgres para inicializarse
+          until docker exec votingapp-db-1 pg_isready -U postgres; do sleep 2; done          
+          
       - name: Verificar archivos de pruebas
         run: ls -R         
       
