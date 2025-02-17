@@ -159,5 +159,8 @@ jobs:
       
       - name: Ejecutar pruebas Selenium (Integración)
         run: |
-          pytest integration_tests --disable-warnings
+          pytest integration_tests/test_selenium --disable-warnings -v --capture=tee-sys
+          pytest result/tests/test_integration --disable-warnings -v --capture=tee-sys
+          pytest vote/tests/test_integration --disable-warnings -v --capture=tee-sys
+          pytest worker/tests/test_integration --disable-warnings -v --capture=tee-sys
 
