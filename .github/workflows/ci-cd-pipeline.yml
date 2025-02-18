@@ -23,10 +23,22 @@ jobs:
         with:
           python-version: '3.9'
 
+# a confirmar si integration_tests/test_selenium realmente está donde debería.
+      - name: Verificar estructura de carpetas
+        run: |
+          echo "Estructura de archivos en la raíz del proyecto:"
+          ls -R
+        shell: bash
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r vote/requirements.txt
+
+# Asegurar que pytest detecte los tests
+      - name: Listar tests detectados por pytest
+        run: pytest --collect-only -v
+        shell: bash
 
       - name: Run Python unit tests
         run: |
@@ -156,11 +168,12 @@ jobs:
           
       - name: Verificar archivos de pruebas
         run: ls -R         
-      
+
+      # Forzar ejecución de pytest con rutas absolutas
       - name: Ejecutar pruebas Selenium (Integración)
         run: |
-          pytest integration_tests/test_selenium --disable-warnings -v --capture=tee-sys
-          pytest result/tests/test_integration --disable-warnings -v --capture=tee-sys
-          pytest vote/tests/test_integration --disable-warnings -v --capture=tee-sys
-          pytest worker/tests/test_integration --disable-warnings -v --capture=tee-sys
-
+          pytest $(pwd)/integration_tests/test_selenium --disable-warnings -v --capture=tee-sys
+          pytest $(pwd)/result/tests/test_integration --disable-warnings -v --capture=tee-sys
+          pytest $(pwd)/vote/tests/test_integration --disable-warnings -v --capture=tee-sys
+          pytest $(pwd)/worker/tests/test_integration --disable-warnings -v --capture=tee-sys
+        shell: bash
