@@ -23,22 +23,10 @@ jobs:
         with:
           python-version: '3.9'
 
-# a confirmar si integration_tests/test_selenium realmente está donde debería.
-      - name: Verificar estructura de carpetas
-        run: |
-          echo "Estructura de archivos en la raíz del proyecto:"
-          ls -R
-        shell: bash
-
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r vote/requirements.txt
-
-# Asegurar que pytest detecte los tests
-      - name: Listar tests detectados por pytest
-        run: pytest --collect-only -v
-        shell: bash
 
       - name: Run Python unit tests
         run: |
