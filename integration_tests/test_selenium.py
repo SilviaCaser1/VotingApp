@@ -22,3 +22,7 @@ def driver():
     )
     yield driver
     driver.quit()
+
+def test_title(driver):
+    driver.get("http://www.google.com")
+    assert "Google" in driver.title
