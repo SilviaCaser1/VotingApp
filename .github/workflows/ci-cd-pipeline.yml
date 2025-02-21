@@ -170,8 +170,8 @@ jobs:
       # Forzar ejecución de pytest con rutas absolutas
       - name: Ejecutar pruebas Selenium (Integración)
         run: |
-          pytest --rootdir=$(pwd)/integration_tests/test_selenium.py --disable-warnings -v --capture=tee-sys
-          pytest --rootdir=$(pwd)/result/tests/test_integration.py --disable-warnings -v --capture=tee-sys
-          pytest --rootdir=$(pwd)/vote/tests/test_integration.py --disable-warnings -v --capture=tee-sys
-          pytest --rootdir=$(pwd)/worker/tests/test_integration.py --disable-warnings -v --capture=tee-sys
+          pytest --rootdir=$(pwd)/integration_tests --disable-warnings -v --capture=tee-sys
+          pytest --rootdir=$(pwd)/result/tests --disable-warnings -v --capture=tee-sys
+          pytest --rootdir=$(pwd)/vote/tests --disable-warnings -v --capture=tee-sys
+          pytest --rootdir=$(pwd)/worker/tests --disable-warnings -v --capture=tee-sys
         shell: bash
