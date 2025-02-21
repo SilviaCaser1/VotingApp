@@ -138,6 +138,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r vote/requirements.txt
           pip install flask # Asegúrate de que Flask esté instalado
+          pip install selenium pytest webdriver-manager
 
       - name: Ver logs de Redis si falla
         if: failure()
