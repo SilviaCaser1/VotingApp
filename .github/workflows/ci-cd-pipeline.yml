@@ -154,18 +154,24 @@ jobs:
           sleep 10  # Da tiempo a Postgres para inicializarse
           until docker exec votingapp-db-1 pg_isready -U postgres; do sleep 2; done          
 
+      - name: Mostrar el directorio actual
+        run: pwd
+
       - name: Verificar estructura de carpetas
         run: |
          pwd
          ls -R
     
       - name: Verificar archivos de pruebas
-        run: ls -R         
+        run: | 
+         find . -type f -name "*.py"
+#        run: ls -R         
 
       # Forzar ejecución de pytest con rutas absolutas
       - name: Ejecutar pruebas Selenium (Integración)
         run: |
-          pytest --rootdir=$(pwd)/tests --disable-warnings -v --capture=tee-sys
+          pytest --rootdir=$(pwd)/example-voting-app/tests --disable-warnings -v --capture=tee-sys
+#          pytest --rootdir=$(pwd)/tests --disable-warnings -v --capture=tee-sys
 #          pytest --rootdir=$(pwd)/integration_tests/test_selenium.py --disable-warnings -v --capture=tee-sys
 #          pytest --rootdir=$(pwd)/result/tests/test_integration.py --disable-warnings -v --capture=tee-sys
 #          pytest --rootdir=$(pwd)/vote/tests/test_integration.py --disable-warnings -v --capture=tee-sys
