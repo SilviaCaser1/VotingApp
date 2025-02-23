@@ -31,7 +31,6 @@ jobs:
 
       - name: Run Python unit tests
         run: |
-          pwd
           cd vote
           python -m unittest discover -s . -p "test_*.py"
 
@@ -43,11 +42,13 @@ jobs:
 
       - name: Install Node.js dependencies for `result`
         run: |
-          pwd
+          cd result
           npm install
+          pwd
 
       - name: Add execution permissions
         run: |
+          pwd
           chmod +x ./result/node_modules/.bin/jest
  
       - name: Run Node.js unit tests for `result`
