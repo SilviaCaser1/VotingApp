@@ -31,6 +31,7 @@ jobs:
 
       - name: Run Python unit tests
         run: |
+          pwd
           cd vote
           python -m unittest discover -s . -p "test_*.py"
 
