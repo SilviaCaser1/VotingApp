@@ -42,7 +42,7 @@ jobs:
 
       - name: Install Node.js dependencies for `result`
         run: |
-          cd ../result
+          pwd
           npm install
 
       - name: Add execution permissions
