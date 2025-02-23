@@ -44,13 +44,12 @@ jobs:
         run: |
           cd result
           npm install
-          pwd
 
       - name: Add execution permissions
         run: |
-          pwd
           chmod +x ./result/node_modules/.bin/jest
  
       - name: Run Node.js unit tests for `result`
         run: |
+          cd result
           npm test
