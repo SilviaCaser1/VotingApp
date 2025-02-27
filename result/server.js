@@ -6,7 +6,7 @@ var express = require('express'),
     server = require('http').Server(app),
     io = require('socket.io')(server);
 
-var port = process.env.PORT || 4000;
+var port = process.env.PORT || 10000;
 
 io.on('connection', function (socket) {
 
@@ -17,8 +17,12 @@ io.on('connection', function (socket) {
   });
 });
 
-var pool = new Pool({
-  connectionString: 'postgres://postgres:postgres@db/postgres'
+const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 async.retry(
@@ -26,16 +30,16 @@ async.retry(
   function(callback) {
     pool.connect(function(err, client, done) {
       if (err) {
-        console.error("Waiting for db");
+        console.error("Error de conexión a la base de datos: ", err);
       }
       callback(err, client);
     });
   },
   function(err, client) {
     if (err) {
-      return console.error("Giving up");
+      return console.error("Dando por perdida la conexión a la base de datos");
     }
-    console.log("Connected to db");
+    console.log("Conectado a la base de datos");
     getVotes(client);
   }
 );
