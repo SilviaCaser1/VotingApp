@@ -40,9 +40,7 @@ services:
     networks:
       - front-tier
       - back-tier
-    environment: 
-      - DB_CONNECTION=${DB_CONNECTION:-postgres://postgres:postgres@db/postgres}
-  
+
   worker:
     build:
       context: ./worker
