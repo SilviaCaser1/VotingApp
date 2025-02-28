@@ -5,7 +5,7 @@ function getPercentages(a, b) {
     result.a = Math.round(a / (a + b) * 100);
     result.b = 100 - result.a;
   } else {
-    result.a = result.b = 50;
+    result.a = result.b = 30;
   }
 
   return result;
