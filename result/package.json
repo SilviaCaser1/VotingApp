@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "npx mocha tests/*.js"
+    "test": "npx mocha tests/*.mjs"
   },
   "author": "",
   "license": "MIT",
