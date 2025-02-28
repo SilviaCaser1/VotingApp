@@ -1,5 +1,5 @@
-import { expect } from 'chai';
-import { getPercentages } from '../views/utils'; // Importando la función con import
+const { expect } = require('chai');
+const { getPercentages } = require('../views/utils'); // Importando la función con require
 
 describe('getPercentages', function() {
   it('debería devolver 50% - 50% cuando a y b son 0', function() {
