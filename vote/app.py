@@ -1,18 +1,17 @@
-#import redis
-from flask import Flask, render_template, request, make_response, g
+from flask import Flask, render_template, request, make_response
 import os
 import socket
 import random
-import json
 import logging
-#from redis import Redis
 
+# Carga de variables desde entorno o valores por defecto
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
 hostname = socket.gethostname()
 
 app = Flask(__name__)
 
+# Configuración de logs si estás corriendo con gunicorn
 gunicorn_error_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers.extend(gunicorn_error_logger.handlers)
 app.logger.setLevel(logging.INFO)
@@ -29,9 +28,8 @@ def hello():
         vote = request.form.get("vote")
         if not vote:
             return "Missing vote", 400
-        return "Vote received", 200
-    return render_template("index.html")
-    
+
+    # Generar respuesta con render_template, incluyendo las variables
     resp = make_response(
         render_template(
             "index.html",
@@ -44,6 +42,5 @@ def hello():
     resp.set_cookie('voter_id', voter_id)
     return resp
 
-
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
